@@ -1,0 +1,418 @@
+<title>Julia's Bachelorette Party</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#152338;
+    --ink-dim:#5b6c82;
+    --bg:#eef3f9;
+    --bg-2:#ffffff;
+    --line:rgba(21,35,56,0.13);
+    --terracotta:#1e3a5f;
+    --terracotta-dim:rgba(30,58,95,0.12);
+    --sage:#2563eb;
+    --sage-dim:rgba(37,99,235,0.12);
+    --gold:#3f7cac;
+    --gold-dim:rgba(63,124,172,0.14);
+    --wine:#1d7a9c;
+    --wine-dim:rgba(29,122,156,0.13);
+    --plum:#3f4fb0;
+    --plum-dim:rgba(63,79,176,0.12);
+    --slate:#46607a;
+    --slate-dim:rgba(70,96,122,0.13);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Barlow',system-ui,sans-serif;
+    margin:0;
+    padding-inline:20px;
+    padding-block:0;
+  }
+  .wrap{max-width:760px;margin:0 auto;}
+
+  .display{font-family:'Oswald',system-ui,sans-serif;font-weight:600;letter-spacing:0.01em;text-transform:uppercase;text-wrap:balance;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding-block:56px 36px;
+    text-align:center;
+    border-bottom:3px solid var(--ink);
+  }
+  .hero .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    letter-spacing:0.18em;
+    color:var(--wine);
+    text-transform:uppercase;
+    text-align:center;
+    margin:0;
+  }
+  .hero h1{
+    font-size:clamp(2.3rem,8.5vw,4.3rem);
+    line-height:1.05;
+    margin:20px 0 0;
+    color:var(--ink);
+    text-align:center;
+  }
+
+  .section-title{
+    font-family:'Oswald',system-ui,sans-serif;
+    font-weight:600;
+    font-size:1.15rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--ink);
+    margin:0 0 26px;
+  }
+
+  .day-divider{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin:40px 0 22px;
+  }
+  .day-divider:first-child{margin-top:0;}
+  .day-divider::before,
+  .day-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .day-divider span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    white-space:nowrap;
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline{padding-block:32px 24px;display:flex;flex-direction:column;gap:0;}
+
+  .stop{
+    display:grid;
+    grid-template-columns:56px 1fr;
+    gap:20px;
+    padding:28px 24px 32px;
+    background:var(--bg-2);
+    border:2px solid var(--accent);
+    border-radius:14px;
+    box-shadow:5px 5px 0 var(--accent-dim);
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity 0.5s ease, transform 0.5s ease;
+    margin-bottom:22px;
+  }
+  .stop.in{opacity:1;transform:translateY(0);}
+
+  .stop .num{
+    font-family:'Oswald',system-ui,sans-serif;
+    font-weight:600;
+    font-size:2.1rem;
+    line-height:1;
+    color:var(--accent);
+  }
+
+  .stop .body{min-width:0;}
+
+  .time{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.95rem;
+    color:var(--ink-dim);
+    margin-bottom:8px;
+  }
+
+  .venue{
+    font-family:'Oswald',system-ui,sans-serif;
+    font-weight:600;
+    font-size:clamp(1.35rem,4.5vw,1.85rem);
+    line-height:1.2;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+
+  .addr{
+    display:flex;
+    gap:8px;
+    align-items:baseline;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    color:var(--ink-dim);
+    margin-bottom:20px;
+  }
+  .addr svg{flex:none;translate:0 2px;}
+
+  .actions{display:flex;flex-wrap:wrap;gap:10px;}
+
+  .btn{
+    font-family:'Barlow',sans-serif;
+    font-weight:600;
+    font-size:0.92rem;
+    text-decoration:none;
+    padding:11px 18px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:filter 0.15s ease, transform 0.15s ease;
+  }
+  .btn:hover{filter:brightness(1.12);transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+  .btn.primary{background:var(--accent);color:#ffffff;}
+  .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);}
+  .btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+  .stop[data-accent="terracotta"]{--accent:var(--terracotta);--accent-dim:var(--terracotta-dim);}
+  .stop[data-accent="sage"]{--accent:var(--sage);--accent-dim:var(--sage-dim);}
+  .stop[data-accent="gold"]{--accent:var(--gold);--accent-dim:var(--gold-dim);}
+  .stop[data-accent="wine"]{--accent:var(--wine);--accent-dim:var(--wine-dim);}
+  .stop[data-accent="plum"]{--accent:var(--plum);--accent-dim:var(--plum-dim);}
+  .stop[data-accent="slate"]{--accent:var(--slate);--accent-dim:var(--slate-dim);}
+
+  /* ---------- Commute connector ---------- */
+  .commute{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 6px 10px 26px;
+    margin-bottom:22px;
+    color:var(--ink-dim);
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+  }
+  .commute svg{flex:none;color:var(--ink-dim);}
+  .commute .line{
+    flex:none;
+    width:2px;
+    align-self:stretch;
+    background:repeating-linear-gradient(to bottom, var(--ink-dim) 0 4px, transparent 4px 9px);
+    opacity:0.55;
+    margin-right:2px;
+  }
+  .commute b{color:var(--ink);font-weight:600;}
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding-block:44px 60px;
+    text-align:center;
+  }
+  footer .rule{
+    width:44px;height:4px;background:var(--wine);
+    margin:0 auto;border-radius:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .stop{transition:none;opacity:1;transform:none;}
+  }
+
+  @media (max-width:480px){
+    .stop{grid-template-columns:40px 1fr;gap:12px;}
+    .stop .num{font-size:1.8rem;}
+    .commute{padding-left:18px;}
+  }
+</style>
+
+<div class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">September 26&ndash;27, 2026 &middot; San Francisco, CA</p>
+    <h1 class="display">Julia's Bachelorette Party</h1>
+  </section>
+
+  <section class="timeline">
+
+    <h2 class="section-title">Schedule of the Weekend</h2>
+
+    <div class="day-divider"><span>Saturday, Sept 26</span></div>
+
+    <article class="stop" data-accent="terracotta">
+      <div class="num display">01</div>
+      <div class="body">
+        <p class="time">10:30 AM &middot; 90 min</p>
+        <h2 class="venue">Cloud 9 Foot Spa</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          1321 Howard Ave, Burlingame, CA 94010
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=1321+Howard+Ave%2C+Burlingame%2C+CA+94010" target="_blank" rel="noopener">Get Directions</a>
+          <a class="btn ghost" href="https://cloud9.spa/loc/burlingame/" target="_blank" rel="noopener">Website</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="commute">
+      <div class="line"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/></svg>
+      <span><b>(&asymp;35 min)</b> Commute: Cloud 9 &rarr; North Beach Farmers Market &mdash; 22 mi</span>
+    </div>
+
+    <article class="stop" data-accent="sage">
+      <div class="num display">02</div>
+      <div class="body">
+        <p class="time">Lunch</p>
+        <h2 class="venue">North Beach Farmers Market</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          725 Greenwich St, San Francisco, CA 94133
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=725+Greenwich+St%2C+San+Francisco%2C+CA+94133" target="_blank" rel="noopener">Get Directions</a>
+          <a class="btn ghost" href="https://www.northbeachfarmersmarket.com/" target="_blank" rel="noopener">Website</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="commute">
+      <div class="line"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/></svg>
+      <span><b>(&asymp;10 min walk)</b> Commute: North Beach &rarr; Ritz-Carlton &mdash; 0.5 mi</span>
+    </div>
+
+    <article class="stop" data-accent="gold">
+      <div class="num display">03</div>
+      <div class="body">
+        <p class="time">4:00 PM &middot; Check-In</p>
+        <h2 class="venue">The Ritz-Carlton, San Francisco</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          600 Stockton St, San Francisco, CA 94108
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=600+Stockton+St%2C+San+Francisco%2C+CA+94108" target="_blank" rel="noopener">Get Directions</a>
+          <a class="btn ghost" href="https://www.ritzcarlton.com/en/hotels/sforz-the-ritz-carlton-san-francisco/overview/" target="_blank" rel="noopener">Website</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="commute">
+      <div class="line"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/></svg>
+      <span><b>(&asymp;10 min walk)</b> Commute: Ritz-Carlton &rarr; Kin Khao &mdash; 0.6 mi &middot; or take the trolley ($9)</span>
+    </div>
+
+    <article class="stop" data-accent="wine">
+      <div class="num display">04</div>
+      <div class="body">
+        <p class="time">7:30 PM &middot; Dinner Reservation</p>
+        <h2 class="venue">Kin Khao</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          55 Cyril Magnin St, San Francisco, CA 94102
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=55+Cyril+Magnin+St%2C+San+Francisco%2C+CA+94102" target="_blank" rel="noopener">Get Directions</a>
+          <a class="btn ghost" href="https://www.kinkhao.com/" target="_blank" rel="noopener">Website</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="commute">
+      <div class="line"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/></svg>
+      <span><b>(&asymp;15 min)</b> Commute: Kin Khao &rarr; Castro St &mdash; 2.3 mi</span>
+    </div>
+
+    <article class="stop" data-accent="plum">
+      <div class="num display">05</div>
+      <div class="body">
+        <p class="time">Evening</p>
+        <h2 class="venue">Castro St Bar Crawl &amp; Late-Night Tacos</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Castro St, San Francisco, CA 94114
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=Castro+St+%26+Market+St%2C+San+Francisco%2C+CA+94114" target="_blank" rel="noopener">Get Directions</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="day-divider"><span>Sunday, Sept 27</span></div>
+
+    <article class="stop" data-accent="slate">
+      <div class="num display">06</div>
+      <div class="body">
+        <p class="time">11:00 AM &middot; Checkout</p>
+        <h2 class="venue">The Ritz-Carlton, San Francisco</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          600 Stockton St, San Francisco, CA 94108
+        </p>
+      </div>
+    </article>
+
+    <div class="commute">
+      <div class="line"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/></svg>
+      <span><b>(&asymp;10 min)</b> Commute: Ritz-Carlton &rarr; Fort Mason &mdash; 2 mi</span>
+    </div>
+
+    <article class="stop" data-accent="sage">
+      <div class="num display">07</div>
+      <div class="body">
+        <p class="time">Brunch</p>
+        <h2 class="venue">Fort Mason</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          2 Marina Blvd, San Francisco, CA 94123
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=2+Marina+Blvd%2C+San+Francisco%2C+CA+94123" target="_blank" rel="noopener">Get Directions</a>
+          <a class="btn ghost" href="https://www.cafarmersmkts.com/fort-mason-center-farmers-market" target="_blank" rel="noopener">Website</a>
+        </div>
+      </div>
+    </article>
+
+    <div class="commute">
+      <div class="line"></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.2"/><circle cx="16.5" cy="17.5" r="1.2"/></svg>
+      <span><b>(&asymp;10 min)</b> Commute: Fort Mason &rarr; Presidio &mdash; 2.5 mi</span>
+    </div>
+
+    <article class="stop" data-accent="terracotta">
+      <div class="num display">08</div>
+      <div class="body">
+        <p class="time">Afternoon</p>
+        <h2 class="venue">Presidio Park &mdash; or Croissant Crawl</h2>
+        <p class="addr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          210 Lincoln Blvd, San Francisco, CA 94129
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&amp;destination=210+Lincoln+Blvd%2C+San+Francisco%2C+CA+94129" target="_blank" rel="noopener">Get Directions</a>
+          <a class="btn ghost" href="https://www.presidio.gov/" target="_blank" rel="noopener">Website</a>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <footer>
+    <div class="rule"></div>
+  </footer>
+
+</div>
+
+<script>
+  try{
+    var stops = document.querySelectorAll('.stop');
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, {threshold:0.15});
+      stops.forEach(function(s){ io.observe(s); });
+    } else {
+      stops.forEach(function(s){ s.classList.add('in'); });
+    }
+  }catch(e){}
+</script>
